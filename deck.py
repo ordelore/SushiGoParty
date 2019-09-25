@@ -7,6 +7,16 @@ specialArray = ["Chopsticks", "Soy Sauce", "Tea", "Menu", "Spoon", "Special Orde
 dessertArray = ["Pudding", "Green Tea Ice Cream", "Fruit"]
 parentArray = [nigiriArray, rollsArray, appetizerArray, specialArray, dessertArray]
 
+makiCountArray = [1,1,1,1,2,2,2,2,2,3,3,3]
+uramakiCountArray = [3,3,3,3,4,4,4,4,5,5,5,5]
+temakiCountArray = [1]
+rollCountArray = [makiCountArray, temakiCountArray, uramakiCountArray]
+
+#0 = box, 1 = sandwich, 2 = anime donut, 3 = roll
+onigiriTypeArray = [0, 0, 1, 1, 2, 2, 3, 3]
+
+#fruit description: each digit is either watermelon, pineapple, or orange
+fruitCountArray = [200, 200, 200, 020, 020, 020, 002, 002, 002, 110, 110, 011, 011, 101, 101]
 numberOfNigiri = 12
 
 numberOfSushiRolls = 12
@@ -54,19 +64,22 @@ class Deck:
         self.deck = self.deck + [0,0,0,0,1,1,1,1,1,2,2,2]
         
         for i in range(numberOfSushiRolls):
-            self.deck.append(10 + rollIndex)
+			if (rollIndex == 1): # temaki don't have varying amounts
+				self.deck.append(110)
+			else:
+				self.deck.append(100 + 10 * rollIndex + i)
         
         for i in range(numberOfAppetizers):
-            self.deck.append(20 + self.appetizerOne)
-            self.deck.append(20 + self.appetizerTwo)
-            self.deck.append(20 + self.appetizerThree)
+            self.deck.append(200 + self.appetizerOne * 10)
+            self.deck.append(200 + self.appetizerTwo * 10)
+            self.deck.append(200 + self.appetizerThree * 10)
         
         for i in range(numberOfSpecials):
-            self.deck.append(30 + self.specialOne)
-            self.deck.append(30 + self.specialTwo)
+            self.deck.append(300 + self.specialOne * 10)
+            self.deck.append(300 + self.specialTwo * 10)
         
         for i in range(numberOfFirstDesserts):
-            self.deck.append(40 + self.dessertType)
+            self.deck.append(400 + self.dessertType * 10)
         
         random.shuffle(self.deck)
 def printHand(hand):
@@ -75,7 +88,10 @@ def printHand(hand):
         string = string + parentArray[get_cardType(card)][get_cardTypeIndex(card)] + ", "
     print(string)
 def get_cardType(value):
-    return int(value / 10)
+    return int(value / 100)
     
 def get_cardTypeIndex(value):
-    return value % 10
+    return int((value % 100) / 10)
+
+def get_cardSubIndex(value):
+	return value % 10
